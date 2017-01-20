@@ -94,13 +94,15 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        Adapter adapter = new Adapter(cursor);
-        adapter.setHasStableIds(true);
-        mRecyclerView.setAdapter(adapter);
+        ArticlesAdapter articlesAdapter = new ArticlesAdapter(cursor);
+        articlesAdapter.setHasStableIds(true);
+        mRecyclerView.setAdapter(articlesAdapter);
+
         int columnCount = getResources().getInteger(R.integer.list_column_count);
-        StaggeredGridLayoutManager sglm =
-                new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(sglm);
+        mRecyclerView.addItemDecoration(new GridItemDecoration(columnCount, getResources().getDimensionPixelOffset(R.dimen.card_margin)));
+
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(layoutManager);
     }
 
     @Override
@@ -113,10 +115,10 @@ public class ArticleListActivity extends AppCompatActivity implements
         startService(new Intent(this, UpdaterService.class));
     }
 
-    private class Adapter extends RecyclerView.Adapter<ViewHolder> {
+    private class ArticlesAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
         private Cursor mCursor;
 
-        public Adapter(Cursor cursor) {
+        ArticlesAdapter(Cursor cursor) {
             mCursor = cursor;
         }
 
@@ -127,9 +129,9 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = getLayoutInflater().inflate(R.layout.list_item_article, parent, false);
-            final ViewHolder vh = new ViewHolder(view);
+            final ArticleViewHolder vh = new ArticleViewHolder(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -141,38 +143,42 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(ArticleViewHolder holder, int position) {
             mCursor.moveToPosition(position);
-            holder.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
-            holder.subtitleView.setText(
-                    DateUtils.getRelativeTimeSpanString(
-                            mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
+            holder.mArticleTitle.setText(mCursor.getString(ArticleLoader.Query.TITLE));
+            holder.mArticlePublishDate.setText(
+                    DateUtils.getRelativeTimeSpanString(mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
                             System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
-                            DateUtils.FORMAT_ABBREV_ALL).toString()
-                            + " by "
-                            + mCursor.getString(ArticleLoader.Query.AUTHOR));
-            holder.thumbnailView.setImageUrl(
+                            DateUtils.FORMAT_ABBREV_ALL).toString());
+            holder.mArticleAuthor.setText(mCursor.getString(ArticleLoader.Query.AUTHOR));
+            holder.mThumbnail.setImageUrl(
                     mCursor.getString(ArticleLoader.Query.THUMB_URL),
                     ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
-            holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
+            holder.mThumbnail.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
         }
 
         @Override
         public int getItemCount() {
             return mCursor.getCount();
         }
+
+
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        DynamicHeightNetworkImageView thumbnailView;
-        TextView titleView;
-        TextView subtitleView;
 
-        ViewHolder(View view) {
+    static class ArticleViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.thumbnail)
+        DynamicHeightNetworkImageView mThumbnail;
+        @BindView(R.id.article_title)
+        TextView mArticleTitle;
+        @BindView(R.id.article_author)
+        TextView mArticleAuthor;
+        @BindView(R.id.article_publish_date)
+        TextView mArticlePublishDate;
+
+        ArticleViewHolder(View view) {
             super(view);
-            thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
-            titleView = (TextView) view.findViewById(R.id.article_title);
-            subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
+            ButterKnife.bind(this, view);
         }
     }
 }

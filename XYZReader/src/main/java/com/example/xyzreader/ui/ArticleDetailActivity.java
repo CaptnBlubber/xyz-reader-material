@@ -29,7 +29,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements LoaderMa
     public final static String EXTRA_CURRENT_ID = "EXTRA_CURRENT_ID";
     private Cursor mCursor;
     private long mCurrentId;
-    private MyPagerAdapter mPagerAdapter;
+    private ArticlesPagerAdapter mPagerAdapter;
 
     @BindView(R.id.pager)
     ViewPager mViewPager;
@@ -49,7 +49,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements LoaderMa
             mCurrentId = savedInstanceState.getLong(EXTRA_CURRENT_ID);
         }
 
-        mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        mPagerAdapter = new ArticlesPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -129,8 +129,8 @@ public class ArticleDetailActivity extends AppCompatActivity implements LoaderMa
         mPagerAdapter.notifyDataSetChanged();
     }
 
-    class MyPagerAdapter extends FragmentStatePagerAdapter {
-        MyPagerAdapter(FragmentManager fm) {
+    class ArticlesPagerAdapter extends FragmentStatePagerAdapter {
+        ArticlesPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

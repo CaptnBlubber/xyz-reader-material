@@ -1,4 +1,12 @@
 <resources>
     <dimen name="content_margin_vertical">24dp</dimen>
     <dimen name="content_margin_horizontal">16dp</dimen>
+    <dimen name="card_content_margin_horizontal">16dp</dimen>
+    <dimen name="card_content_margin_vertical">8dp</dimen>
+
+    <!-- margin between all Cards -->
+    <dimen name="card_margin">4dp</dimen>
+
+    <!-- added left and right of the list to archive the same spacing to the edges as in between all cards -->
+    <dimen name="card_margin_half">2dp</dimen>
 </resources>

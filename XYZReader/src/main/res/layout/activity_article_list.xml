@@ -42,6 +42,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
+            android:paddingEnd="@dimen/card_margin_half"
+            android:paddingLeft="@dimen/card_margin_half"
+            android:paddingRight="@dimen/card_margin_half"
+            android:paddingStart="@dimen/card_margin_half"
             android:scrollbarStyle="outsideOverlay"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
