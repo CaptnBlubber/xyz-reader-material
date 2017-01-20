@@ -4,9 +4,11 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
 }
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 
 repositories {
     mavenCentral()
@@ -23,6 +25,11 @@ android {
 }
 
 dependencies {
+
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 
     compile 'com.android.support:design:25.1.0'
 
