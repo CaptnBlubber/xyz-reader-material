@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -42,7 +41,7 @@ import butterknife.Unbinder;
  * ArticleListActivity} in two-pane mode (on tablets) or a {@link ArticleDetailActivity} on handsets.
  */
 public class ArticleDetailFragment extends Fragment implements
-        LoaderManager.LoaderCallbacks<Cursor>, AppBarLayout.OnOffsetChangedListener {
+        LoaderManager.LoaderCallbacks<Cursor> {
     public static final String ARG_ITEM_ID = "ARG_ITEM_ID";
     @BindView(R.id.photo)
     ImageView mPhoto;
@@ -64,8 +63,7 @@ public class ArticleDetailFragment extends Fragment implements
     NestedScrollView mArticleDetailContainer;
     @BindView(R.id.share_fab)
     FloatingActionButton mShareFab;
-    @BindView(R.id.detail_toolbar_title)
-    TextView mDetailToolbarTitle;
+
     private Unbinder unbinder;
     private long mItemId;
 
@@ -117,12 +115,6 @@ public class ArticleDetailFragment extends Fragment implements
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mAppBar.addOnOffsetChangedListener(this);
-    }
-
-    @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return ArticleLoader.newInstanceForItemId(getActivity(), mItemId);
     }
@@ -150,8 +142,6 @@ public class ArticleDetailFragment extends Fragment implements
                 getActivity().finish();
             }
         });
-
-        mDetailToolbarTitle.setText(title);
 
         mArticleTitle.setText(title);
         mArticleAuthor.setText(author);
@@ -217,16 +207,5 @@ public class ArticleDetailFragment extends Fragment implements
         });
     }
 
-    @Override
-    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        int maxScroll = appBarLayout.getTotalScrollRange();
-        float percentage = (float) Math.abs(verticalOffset) / (float) maxScroll;
 
-        if (percentage >= 0.80f) {
-            mDetailToolbarTitle.setVisibility(View.VISIBLE);
-        } else {
-            mDetailToolbarTitle.setVisibility(View.GONE);
-        }
-
-    }
 }
