@@ -126,13 +126,11 @@ public class ArticleDetailFragment extends Fragment implements
         }
 
         final String title = cursor.getString(ArticleLoader.Query.TITLE);
-        String author = Html.fromHtml(
-                DateUtils.getRelativeTimeSpanString(
-                        cursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
-                        System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
-                        DateUtils.FORMAT_ABBREV_ALL).toString()
-                        + " by "
-                        + cursor.getString(ArticleLoader.Query.AUTHOR)).toString();
+        String author = Html.fromHtml(DateUtils.getRelativeTimeSpanString(cursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
+                System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
+                DateUtils.FORMAT_ABBREV_ALL).toString()
+                + " by "
+                + cursor.getString(ArticleLoader.Query.AUTHOR)).toString();
         final String body = Html.fromHtml(cursor.getString(ArticleLoader.Query.BODY)).toString();
         String photo = cursor.getString(ArticleLoader.Query.PHOTO_URL);
 
