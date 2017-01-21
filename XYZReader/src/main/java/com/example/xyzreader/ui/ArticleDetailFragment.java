@@ -203,11 +203,16 @@ public class ArticleDetailFragment extends Fragment implements
         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
             @Override
             public void onGenerated(Palette palette) {
-                int defaultColor = 0xFF333333;
-                int darkMutedColor = palette.getDarkMutedColor(defaultColor);
-                mPhotoDescriptionContainer.setBackgroundColor(darkMutedColor);
-                mToolbarLayout.setContentScrimColor(darkMutedColor);
-                mToolbarLayout.setStatusBarScrimColor(darkMutedColor);
+                Palette.Swatch swatch = palette.getDominantSwatch();
+                if (swatch != null) {
+                    mPhotoDescriptionContainer.setBackgroundColor(swatch.getRgb());
+                    mToolbarLayout.setContentScrimColor(swatch.getRgb());
+                    mToolbarLayout.setStatusBarScrimColor(swatch.getRgb());
+
+                    mArticleTitle.setTextColor(swatch.getTitleTextColor());
+                    mArticleAuthor.setTextColor(swatch.getBodyTextColor());
+                }
+
             }
         });
     }
